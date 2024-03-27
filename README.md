@@ -364,22 +364,24 @@ docker pull dmitryill/custom-nginx:1.0.0
 ```
 ![alt text](image-42.png)
 
+Прицепил таг:
+
 ```
-docker tag dmitryill/custom-nginx:1.0.0 localhost:5000/latest
+dokcer tag dmitryill/custom-nginx:1.0.0 localhost:5000/custom-nginx:latest
 ```
 
 ![alt text](image-43.png)
 
+Запушил в свой репозиторий (регистри):
+
 ```
-docker push localhost:5000/latest
+docker push localhost:5000/custom-nginx:latest
 ```
 
 ![alt text](image-44.png)
 
 Удалил из локального репозитория:
 ![alt text](image-45.png)
-
-
 
 4. Откройте страницу "https://127.0.0.1:9000" и произведите начальную настройку portainer.(логин и пароль адмнистратора)
 
@@ -397,27 +399,55 @@ services:
       - "9090:80"
 ```
 
-Тут возникла ошибка:
+Результат:
 
 ![alt text](image-47.png)
 
-Тут я не понял. В чем ошибка?
-Но, я докер контенеры поднимал на ВМ в облаке, поэтому заходил черзе внешний IP через браузер.
-И я сомневаюсь корректно ли получилось залить свой образ в локальный репозиторий.
-
-Я пробовал его залить еще раз - не получилось:
-
 ![alt text](image-48.png)
 
-Что что-то я сделал не так при залитии образа в репозиторий?
+6. Перейдите на страницу "http://127.0.0.1:9000/#!/2/docker/containers",
 
-Далее пока не делал.
+![alt text](image-49.png)
 
-.....
+ выберите контейнер с nginx и нажмите на кнопку "inspect". В представлении <> Tree разверните поле "Config" и сделайте скриншот от поля "AppArmorProfile" до "Driver".
 
-6. Перейдите на страницу "http://127.0.0.1:9000/#!/2/docker/containers", выберите контейнер с nginx и нажмите на кнопку "inspect". В представлении <> Tree разверните поле "Config" и сделайте скриншот от поля "AppArmorProfile" до "Driver".
+![alt text](image-50.png)
 
-7. Удалите любой из манифестов компоуза(например compose.yaml).  Выполните команду "docker compose up -d". Прочитайте warning, объясните суть предупреждения и выполните предложенное действие. Погасите compose-проект ОДНОЙ(обязательно!!) командой.
+7. Удалите любой из манифестов компоуза(например compose.yaml). 
+
+![alt text](image-51.png)
+
+ Выполните команду "docker compose up -d". Прочитайте warning, объясните суть предупреждения и выполните предложенное действие.
+ 
+ ![alt text](image-52.png)
+
+
+```
+WARN[0000] /root/task5/docker-compose.yaml: `version` is obsolete
+```
+- предупреждение, что версия устарела (видимо самого файла, т.к. содержимое файла не соотвествует запущенным сервисам).
+
+```
+WARN[0000] Found orphan containers ([task5-portainer-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+```
+- предупреждение, что найдены контейнеры, которые не описаны в файле. для очистки их выполнить с флагом --remove-orphans :
+
+```
+docker compose up -d --remove-orphans
+```
+
+![alt text](image-53.png)
+
+![alt text](image-54.png)
+
+ 
+Погасите compose-проект ОДНОЙ(обязательно!!) командой.
+
+```
+docker compose down
+```
+
+![alt text](image-55.png)
 
 В качестве ответа приложите скриншоты консоли, где видно все введенные команды и их вывод, файл compose.yaml , скриншот portainer c задеплоенным компоузом.
 
